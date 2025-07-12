@@ -1,0 +1,58 @@
+# Task 1: Ingestion Pipeline Docker Compose
+
+version: '3.8'
+
+services:
+  # TimescaleDB service
+  timescaledb:
+    image: timescale/timescaledb:2.11.0-pg15
+    container_name: task1_timescaledb
+    environment:
+      POSTGRES_DB: fitbit_data
+      POSTGRES_USER: fitbit_user
+      POSTGRES_PASSWORD: fitbit_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - fitbit_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fitbit_user -d fitbit_data"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Data ingestion service
+  fitbit_ingestion:
+    build: 
+      context: ./src/ingestion
+      dockerfile: Dockerfile
+    container_name: task1_ingestion
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    environment:
+      - DB_HOST=timescaledb
+      - DB_PORT=5432
+      - DB_NAME=fitbit_data
+      - DB_USER=fitbit_user
+      - DB_PASSWORD=fitbit_password
+      - DATA_FILE_PATH=/app/data/complete_clinical_trial.json
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    networks:
+      - fitbit_network
+    restart: unless-stopped
+
+volumes:
+  timescale_data:
+    driver: local
+
+networks:
+  fitbit_network:
+    driver: bridge
