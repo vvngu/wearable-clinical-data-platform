@@ -1,7 +1,5 @@
 # Task 1: Ingestion Pipeline Docker Compose
 
-version: '3.8'
-
 services:
   # TimescaleDB service
   timescaledb:
