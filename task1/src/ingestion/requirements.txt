@@ -1,0 +1,8 @@
+# Task 1 Python Requirements
+# File: task1/src/ingestion/requirements.txt
+
+psycopg2-binary==2.9.7
+requests==2.31.0
+pandas==2.0.3
+numpy==1.24.3
+python-dateutil==2.8.2
