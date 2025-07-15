@@ -11,9 +11,10 @@ This repository contains solutions for the Snyderlab Challenge tasks:
 
 - [x] **Task 1**: Daily data ingestion pipeline with **TimescaleDB** ✅
 - [x] **Task 2**: API and dashboard for data access/visualization ✅
-- [x] Task 3: Multi-user/multi-year query optimization ✅
+- [x] **Task 3**: Multi-user/multi-year query optimization ✅
 - [ ] Task 4: Advanced dashboard with clinical trial features
 - [ ] Task 5: Monitoring and alerting system
+- [ ] Task 6 (Optional): Horizontal Scaling
 
 Data Source
 
@@ -29,9 +30,9 @@ The pipeline processes synthetic Fitbit Charge 6 data generated using the Wearip
 Quick Start
 Prerequisites
 
-    Docker and Docker Compose
-    Git
-    At least 4GB RAM (8GB recommended)
+- **Docker** and **Docker Compose**
+- Git
+- At least 4GB RAM (8GB recommended)
 
 Task 1: Data Ingestion Pipeline
 
@@ -55,9 +56,10 @@ Task 1: Data Ingestion Pipeline
 Task 2: API & Dashboard
 Prerequisites
 
-    Task 1 TimescaleDB with data loaded
-    Docker and Docker Compose
-    Node.js for React development
+- `Task 1` **TimescaleDB** with data loaded
+- **Docker** and **Docker Compose**
+- **Node.js** for **React** development
+    
 Quick Start
     
     cd task2
@@ -147,14 +149,14 @@ Aggregation Strategy
 - `data_1d` continuous aggregate: 1-day summaries
 
 ## Query Router Logic
-  def get_optimal_table(start_date, end_date):
-    time_diff = end_date - start_date
+   	```def get_optimal_table(start_date, end_date):
+    time_diff = end_date - start_date 
     if time_diff > timedelta(days=7):
         return "data_1d"  
     elif time_diff > timedelta(hours=6): 
         return "data_1h"
     else:
-        return "raw_data"
+        return "raw_data"```
 
 License
 
