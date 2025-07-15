@@ -17,7 +17,13 @@ This repository contains solutions for the Snyderlab Challenge tasks:
 
 Data Source
 
-The pipeline processes synthetic Fitbit Charge 6 data generated using the Wearipedia framework, including
+The pipeline processes synthetic Fitbit Charge 6 data generated using the Wearipedia framework, including:
+
+- **Heart Rate**: 1-second resolution intraday data
+- **Breathing Rate**: Sleep-based measurements  
+- **Active Zone Minutes**: Per-minute activity data
+- **Heart Rate Variability**: 5-minute intervals during sleep
+- **SpO2**: Per-minute measurements during sleep
 
 
 Quick Start
@@ -133,7 +139,9 @@ Reasoning:
 License
 
 This project is part of the Snyderlab Challenge and is intended for educational and research purposes.
-Acknowledgments
 
-    Stanford Health: For the Wearipedia framework
-    Snyderlab: For the challenge structure
+### Data Source License
+The synthetic Fitbit data is generated using the [Wearipedia](https://github.com/Stanford-Health/wearipedia) framework, which is licensed under the MIT License.
+
+### Project Code
+The pipeline implementation code in this repository is developed for the Snyderlab Challenge evaluation.
