@@ -11,7 +11,7 @@ This repository contains solutions for the Snyderlab Challenge tasks:
 
 - [x] **Task 1**: Daily data ingestion pipeline with **TimescaleDB** ✅
 - [x] **Task 2**: API and dashboard for data access/visualization ✅
-- [ ] Task 3: Multi-user/multi-year query optimization
+- [x] Task 3: Multi-user/multi-year query optimization ✅
 - [ ] Task 4: Advanced dashboard with clinical trial features
 - [ ] Task 5: Monitoring and alerting system
 
@@ -130,6 +130,31 @@ Reasoning:
 - API containerization: Consistent deployment environment
 - React: Fast development cycle with hot reload
 - Database integration: Reuses `Task 1` **TimescaleDB** instance
+
+## Task 3: Query Optimization Implementation
+
+### What Was Built
+- Intelligent query router for automatic table selection based on time range
+- Memory-efficient query execution using **TimescaleDB** continuous aggregates
+- Transparent optimization with response metadata showing performance decisions
+- Multi-user scalability preparation for clinical trials (n>100 participants)
+
+## Technical Decisions
+Aggregation Strategy
+- `raw_data` hypertable: Full resolution intraday data
+- `data_1m` continuous aggregate: 1-minute summaries
+- `data_1h` continuous aggregate: 1-hour summaries
+- `data_1d` continuous aggregate: 1-day summaries
+
+## Query Router Logic
+  def get_optimal_table(start_date, end_date):
+    time_diff = end_date - start_date
+    if time_diff > timedelta(days=7):
+        return "data_1d"  
+    elif time_diff > timedelta(hours=6): 
+        return "data_1h"
+    else:
+        return "raw_data"
 
 License
 
