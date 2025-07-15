@@ -24,7 +24,7 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
+    
 @dataclass
 class DatabaseConfig:
     """Configuration for database connection"""
@@ -45,6 +45,7 @@ class DatabaseConfig:
             password=os.getenv('DB_PASSWORD', 'fitbit_password')
         )
 
+        
 class DatabaseManager:
     """Manager for database operations"""
     
