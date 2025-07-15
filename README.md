@@ -94,6 +94,7 @@ Data Processing Strategy
 - Metadata tracking: Maintains data lineage and quality information
 
 ## Task 2: API & Dashboard Implementation
+<img width="540" height="388" alt="Screenshot 2025-07-15 at 11 39 02 AM" src="https://github.com/user-attachments/assets/8d0cc2be-27cd-4386-9d34-a55a3f7eb0a9" />
 
 ### What Was Built
 - **FastAPI** backend with REST endpoints for time-series data access
