@@ -13,6 +13,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from query_optimizer import QueryOptimizer
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -51,6 +52,8 @@ class MetricsResponse(BaseModel):
     end_date: str
     data: List[MetricData]
     total_records: int
+    table_used: str = "raw_data"
+    query_type: str = "optimized"
 
 class DatabaseManager:
     """Simple database connection manager"""
@@ -58,6 +61,7 @@ class DatabaseManager:
     def __init__(self, config: dict):
         self.config = config
         self.connection = None
+        self.optimizer = None
     
     def connect(self):
         """Establish database connection"""
@@ -94,6 +98,8 @@ async def startup_event():
     logger.info("Starting FastAPI application")
     if not db_manager.connect():
         raise Exception("Failed to connect to database")
+    db_manager.optimizer = QueryOptimizer(db_manager)
+    logger.info("Query optimizer initialized")
     logger.info("Database connected successfully")
 
 @app.on_event("shutdown")
@@ -127,27 +133,15 @@ async def get_metrics(
         end_dt = datetime.strptime(end_date, "%Y-%m-%d")
         
         # Validate date range
-        if start_dt >= end_dt:
+        if start_dt > end_dt:
             raise HTTPException(
                 status_code=400, 
                 detail="start_date must be before end_date"
             )
+        query, params, table_name = db_manager.optimizer.build_optimized_query(
+            start_dt, end_dt, user_id, metric_type, limit
+        )
         
-        query = """
-        SELECT 
-            timestamp,
-            value,
-            metadata
-        FROM raw_data
-        WHERE user_id = %s 
-        AND metric_type = %s
-        AND timestamp >= %s
-        AND timestamp <= %s
-        ORDER BY timestamp ASC
-        LIMIT %s
-        """
-        
-        params = (user_id, metric_type, start_dt, end_dt, limit)
         results = db_manager.execute_query(query, params)
         
         data = []
@@ -164,7 +158,9 @@ async def get_metrics(
             start_date=start_date,
             end_date=end_date,
             data=data,
-            total_records=len(data)
+            total_records=len(data),
+            table_used=table_name,
+            query_type="optimized"
         )
         
     except ValueError as e:
@@ -173,11 +169,14 @@ async def get_metrics(
             detail=f"Invalid date format. Use YYYY-MM-DD: {e}"
         )
     except Exception as e:
-        logger.error(f"Error fetching metrics: {e}")
+        logger.error(f"Error fetching metrics: {str(e)}")
+        logger.error(f"Error type: {type(e)}")
+        import traceback
+        logger.error(f"Full traceback: {traceback.format_exc()}")
         raise HTTPException(
             status_code=500,
-            detail="Internal server error"
-        )
+            detail=f"Internal server error: {str(e)}"
+    )
 
 @app.get("/api/v1/users/{user_id}/metrics")
 async def get_user_metrics(user_id: str):
