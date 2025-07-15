@@ -26,6 +26,24 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 @dataclass
+class FitbitConfig:
+    """Configuration for Fitbit API access"""
+    client_id: str
+    client_secret: str
+    access_token: str
+    refresh_token: str
+    
+    @classmethod
+    def from_env(cls) -> 'FitbitConfig':
+        """Load configuration from environment variables"""
+        return cls(
+            client_id=os.getenv('FITBIT_CLIENT_ID', ''),
+            client_secret=os.getenv('FITBIT_CLIENT_SECRET', ''),
+            access_token=os.getenv('FITBIT_ACCESS_TOKEN', ''),
+            refresh_token=os.getenv('FITBIT_REFRESH_TOKEN', '')
+        )
+    
+@dataclass
 class DatabaseConfig:
     """Configuration for database connection"""
     host: str
@@ -44,7 +62,27 @@ class DatabaseConfig:
             user=os.getenv('DB_USER', 'fitbit_user'),
             password=os.getenv('DB_PASSWORD', 'fitbit_password')
         )
-
+class FitbitClient:
+    """Client for interacting with Fitbit API"""
+    
+    def __init__(self, config: FitbitConfig):
+        self.config = config
+        self.base_url = "https://api.fitbit.com/1"
+        
+    def get_heart_rate_data(self, date: str, user_id: str = "-") -> Optional[Dict[str, Any]]:
+        """Get heart rate data for a specific date"""
+        try:
+            url = f"{self.base_url}/user/{user_id}/activities/heart/date/{date}/1d/1sec.json"
+            headers = {'Authorization': f'Bearer {self.config.access_token}'}
+            
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            return response.json()
+            
+        except Exception as e:
+            logger.error(f"Failed to get heart rate data for {date}: {str(e)}")
+            return None
+        
 class DatabaseManager:
     """Manager for database operations"""
     
