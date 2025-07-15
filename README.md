@@ -8,7 +8,7 @@ Project Overview
 
 This repository contains solutions for all 5 tasks of the Snyderlab Challenge:
 
-[x] Task 1: Daily data ingestion pipeline with **TimescaleDB**✅
+    Task 1: Daily data ingestion pipeline with **TimescaleDB**✅
     Task 2: API and dashboard for data access/visualization
     Task 3: Multi-user/multi-year query optimization
     Task 4: Advanced dashboard with clinical trial features
