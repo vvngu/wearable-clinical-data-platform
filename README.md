@@ -11,9 +11,9 @@ This repository contains solutions for the Snyderlab Challenge tasks:
 
 - [x] **Task 1**: Daily data ingestion pipeline with **TimescaleDB** ✅
 - [x] **Task 2**: API and dashboard for data access/visualization ✅
-    Task 3: Multi-user/multi-year query optimization
-    Task 4: Advanced dashboard with clinical trial features
-    Task 5: Monitoring and alerting system
+- [ ] Task 3: Multi-user/multi-year query optimization
+- [ ] Task 4: Advanced dashboard with clinical trial features
+- [ ] Task 5: Monitoring and alerting system
 
 Data Source
 
@@ -67,38 +67,37 @@ Quick Start
     npm install
     npm start
 
-    Access the dashboard at http://localhost:3000
-    Access API docs at http://localhost:8000/docs
+Access the dashboard at `http://localhost:3000`
+
+Access API docs at `http://localhost:8000/docs`
 
 ## Task 1: Data Ingestion Pipeline 
 ### What Was Built 
-- Daily delta-load pipeline using TimescaleDB
-- Docker Compose orchestration
+- Daily delta-load pipeline using **TimescaleDB**
+- **Docker** Compose orchestration
 - Structured data ingestion from clinical trial exports
 - Comprehensive error handling and logging
   
 ## Technical Decisions
 Why TimescaleDB?
-
-    Time-series optimization: Built for time-series data with automatic partitioning
-    PostgreSQL compatibility: Full SQL support with familiar interface
-    Continuous aggregates: Pre-computed summaries for fast queries
-    Scalability: Handles multi-user, multi-year clinical trial data
+- Time-series optimization: Built for time-series data with automatic partitioning
+- **PostgreSQL** compatibility: Full **SQL** support with familiar interface
+- Continuous aggregates: Pre-computed summaries for fast queries
+- Scalability: Handles multi-user, multi-year clinical trial data
 
 Data Processing Strategy
-
-    Structured ingestion: Pre-processed clinical trial data format
-    Batch processing: Efficient bulk insertions with error handling
-    Multi-metric support: Handles all Fitbit data types with proper normalization
-    Metadata tracking: Maintains data lineage and quality information
+- Structured ingestion: Pre-processed clinical trial data format
+- Batch processing: Efficient bulk insertions with error handling
+- Multi-metric support: Handles all Fitbit data types with proper normalization
+- Metadata tracking: Maintains data lineage and quality information
 
 ## Task 2: API & Dashboard Implementation
 
 ### What Was Built
 - **FastAPI** backend with REST endpoints for time-series data access
 - **React** frontend with interactive data visualization
-- **Hybrid deployment** approach for development efficiency
-- **Direct TimescaleDB queries** with proper error handling
+- Hybrid deployment approach for development efficiency
+- Direct **TimescaleDB** queries with proper error handling
 
 #### Database Connection
 - **Technology**: `psycopg2` **PostgreSQL** client for **Python**
@@ -106,35 +105,31 @@ Data Processing Strategy
 - **Query optimization**: Leverages time-series indexing for efficient data retrieval
 
 User Interface
-    
-    Form-based querying: Select user_id, metric_type, date range, and limit
-    Real-time visualization: Recharts line charts with responsive design
-    Error handling: User-friendly error messages and loading states
+- Form-based querying: Select `user_id`, `metric_type`, date range, and limit
+- Real-time visualization: **Recharts** line charts with responsive design
+- Error handling: User-friendly error messages and loading states
 
-Chart Features
-    
-    Time-series line charts with proper time formatting
-    Real-time updates when parameters change
+Chart Features 
+- Time-series line charts with proper time formatting
+- Real-time updates when parameters change
 ## Technical Decisions
 Why FastAPI?
-
-    Type validation with Pydantic models for data integrity
-    Async capabilities for concurrent requests
-    Auto-generated interactive docs at /docs & automatic API documentation
+- Type validation with Pydantic models for data integrity
+- Async capabilities for concurrent requests
+- Auto-generated interactive docs at /docs & automatic API documentation
 
 Why React + Recharts?
-
-    Component-based architecture for maintainable UI
-    Recharts: Lightweight, declarative charting library
-    React hooks for clean data flow
-    Hot reload and modern tooling
+- Component-based architecture for maintainable UI
+- **Recharts**: Lightweight, declarative charting library
+- **React** hooks for clean data flow
+- Hot reload and modern tooling
 
 Deployment Strategy
-    API in Docker and React local development
+- API in **Docker** and **React** local development
 Reasoning:
-    API containerization: Consistent deployment environment
-    React: Fast development cycle with hot reload
-    Database integration: Reuses Task 1 TimescaleDB instance
+- API containerization: Consistent deployment environment
+- React: Fast development cycle with hot reload
+- Database integration: Reuses `Task 1` **TimescaleDB** instance
 
 License
 
