@@ -1,4 +1,4 @@
-# Snyderlab-Challenge
+# wearable-clinical-data-platform
 
 Stanford Snyderlab Challenge - Fitbit Data Pipeline
 
